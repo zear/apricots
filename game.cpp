@@ -383,6 +383,79 @@ void control(gamedata &g, Uint8 *keys, int &jx, int &jy, bool &jb){
 
 }
 
+void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
+	int deadzone = 250;
+	int x;
+	int y;
+
+	SDL_Joystick *joy = SDL_JoystickOpen(0); // temp;
+
+	switch(g.p().control){
+		case 1:
+			if(demo)
+				computer_ai(g, g.p(), jx, jy, jb);
+			else
+			{
+				x = SDL_JoystickGetAxis(joy, 0); // left-right
+				y = SDL_JoystickGetAxis(joy, 1); // up-down
+
+				if(x < -deadzone)
+					jx = -1;
+				else if(x > deadzone)
+					jx = 1;
+				//else
+				//	jx = 0;
+
+
+				if(y < -deadzone)
+					jy = -1;
+				else if(y > deadzone)
+					jy = 1; // drop bomb
+				//else
+				//	jy = 0;
+
+				jb = (bool)SDL_JoystickGetButton(joy, 0); // fire
+				if(SDL_JoystickGetButton(joy, 1)) // drop bomb
+					jy = 1;
+			}
+			break;
+		case 2:
+			if(demo)
+				computer_ai(g, g.p(), jx, jy, jb);
+/*
+			else
+			{
+				x = SDL_JoystickGetAxis(joy, 0); // left-right
+				y = SDL_JoystickGetAxis(joy, 1); // up-down
+
+				if(x < -deadzone)
+					jx = -1;
+				else if(x > deadzone)
+					jx = 1;
+				else
+					jx = 0;
+
+
+				if(y < -deadzone)
+					jy = -1;
+				else if(y > deadzone)
+					jy = 1; // drop bomb
+				else
+					jy = 0;
+
+				jb = (bool)SDL_JoystickGetButton(joy, 0); // fire
+				if(SDL_JoystickGetButton(joy, 1)) // drop bomb
+					jy = 1;
+			}
+*/
+			break;
+
+		default:
+			computer_ai(g, g.p(), jx, jy, jb);
+		break;
+	}
+}
+
 // Calculate time pause to stabilize framerate
 
 Uint32 time_left(Uint32 next_time){
@@ -460,6 +533,7 @@ void game (gamedata &g){
 
 	      if (g.p().state < 2){
 		control(g, keys, jx, jy, jb);
+		controlJoy(g, jx, jy, jb);
 	      }
 	      // Then move the plane
 	      act(g, jx, jy, jb);
