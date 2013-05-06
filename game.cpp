@@ -388,10 +388,10 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 	int x;
 	int y;
 
-	SDL_Joystick *joy = SDL_JoystickOpen(0); // temp;
-
 	switch(g.p().control){
 		case 1:
+		{
+			SDL_Joystick *joy = SDL_JoystickOpen(g.playerJoy[0]);
 			if(demo)
 				computer_ai(g, g.p(), jx, jy, jb);
 			else
@@ -409,20 +409,22 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 
 				if(y < -deadzone)
 					jy = -1;
-				else if(y > deadzone)
-					jy = 1; // drop bomb
+				//else if(y > deadzone)
+				//	jy = 1; // drop bomb
 				//else
 				//	jy = 0;
 
-				jb = (bool)SDL_JoystickGetButton(joy, 0); // fire
-				if(SDL_JoystickGetButton(joy, 1)) // drop bomb
+				jb = (bool)SDL_JoystickGetButton(joy, g.playerJoyBut[0][0]); // fire
+				if(SDL_JoystickGetButton(joy, g.playerJoyBut[0][1])) // drop bomb
 					jy = 1;
 			}
+		}
 			break;
 		case 2:
+		{
+			SDL_Joystick *joy = SDL_JoystickOpen(g.playerJoy[1]);
 			if(demo)
 				computer_ai(g, g.p(), jx, jy, jb);
-/*
 			else
 			{
 				x = SDL_JoystickGetAxis(joy, 0); // left-right
@@ -438,16 +440,16 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 
 				if(y < -deadzone)
 					jy = -1;
-				else if(y > deadzone)
-					jy = 1; // drop bomb
-				else
-					jy = 0;
+				//else if(y > deadzone)
+				//	jy = 1; // drop bomb
+				//else
+				//	jy = 0;
 
-				jb = (bool)SDL_JoystickGetButton(joy, 0); // fire
-				if(SDL_JoystickGetButton(joy, 1)) // drop bomb
+				jb = (bool)SDL_JoystickGetButton(joy, g.playerJoyBut[1][0]); // fire
+				if(SDL_JoystickGetButton(joy, g.playerJoyBut[0][1])) // drop bomb
 					jy = 1;
 			}
-*/
+		}
 			break;
 
 		default:
@@ -509,6 +511,10 @@ void game (gamedata &g){
 	    else if(GameState == STATE_MENU_PLANE_SELECT)
 	    {
 		    menuPlanes(g);
+	    }
+	    else if(GameState == STATE_MENU_PLAYER_CONTROL_SELECT)
+	    {
+		    menuSelectPlayer(g);
 	    }
 	    else if(GameState == STATE_GAME)
 	    {

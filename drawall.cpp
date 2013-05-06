@@ -315,6 +315,10 @@ void drawall(gamedata &g){
   {
 	menuPlanesDraw(20, 10, g);
   }
+  else if(GameState == STATE_MENU_PLAYER_CONTROL_SELECT)
+  {
+	menuSelectPlayerDraw(g);
+  }
 
   // Best AI Score
   if (g.planes > g.players){

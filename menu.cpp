@@ -16,6 +16,8 @@ int cursorX = 0;
 int cursorY = 0;
 int *p1plane = NULL;
 int *p2plane = NULL;
+int p1sel = 0;
+int p2sel = 0;
 
 MenuContainer *menuCreateNew(MenuContainer *Container, int number, char *caption, int value, MenuAction Action)
 {
@@ -93,6 +95,15 @@ void menuAction(MenuItem *Item, gamedata &g)
 						GameState = STATE_MENU_PLANE_SELECT;
 						return;
 					}
+			}
+
+			if(SDL_NumJoysticks() > 1)
+			{
+				if(g.playerJoy[0] == -1 && g.playerJoy[1] == -1)
+				{
+					GameState = STATE_MENU_PLAYER_CONTROL_SELECT;
+					return;
+				}
 			}
 
 			finish_game(g);
@@ -679,5 +690,255 @@ void loadPlaneInfo(gamedata &g)
 			}
 		}
 	}
+}
+
+void menuSelectPlayer(gamedata &g)
+{
+	int numOfJoys = SDL_NumJoysticks();
+
+	if(numOfJoys > 1)
+	{
+		static int allJoys[10];
+		static int allowMove[10];
+		static int selectInput[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		static int done[2] = {0, 0};
+
+		if(numOfJoys > 9)
+			numOfJoys = 9;
+
+		if(done[0])
+		{
+			if(done[1] || newg.players == 1)
+			{
+				done[0] = 0;
+				done[1] = 0;
+				for(int i = 0; i < 10; i++)
+				{
+					selectInput[i] = 0;
+				}
+
+				GameState = STATE_MENU;
+				menuAction(menuSwitchItem(MenuMain, 0), g);
+			}
+		}
+			
+
+		for(int i = 0; i < numOfJoys; i++)
+		{
+			SDL_Joystick *joy = SDL_JoystickOpen(i);
+			int deadzone = 250;
+			int y;
+
+			if(selectInput[i])
+			{
+				int pnum;
+				if(allJoys[i] == -1)
+					pnum = 0;
+				else
+					pnum = 1;
+
+				if(!allowMove[i])
+				{
+					int change = 1;
+
+					for(int j = 0; j < SDL_JoystickNumButtons(joy); j++)
+					{
+						if(SDL_JoystickGetButton(joy, j))
+							change = 0;
+					}
+					if(change)
+						allowMove[i] = 1;
+				}
+
+				if(g.playerJoyBut[pnum][0] == -1 && allowMove[i])
+				{
+					for(int j = 0; j < SDL_JoystickNumButtons(joy); j++)
+					{
+						if(SDL_JoystickGetButton(joy, j))
+						{
+							g.playerJoyBut[pnum][0] = j;
+							allowMove[i] = 0;
+						}
+					}
+				}
+				else if(g.playerJoyBut[pnum][1] == -1 && allowMove[i])
+				{
+					for(int j = 0; j < SDL_JoystickNumButtons(joy); j++)
+					{
+						if(SDL_JoystickGetButton(joy, j))
+						{
+							g.playerJoyBut[pnum][1] = j;
+							allowMove[i] = 0;
+							if(pnum == 1)
+								done[1] = 1;
+						}
+					}
+				}
+				else if(allJoys[i] == -1 && allowMove[i])
+				{
+					if(g.playerJoyBut[0][2] == -1)
+					{
+						for(int j = 0; j < SDL_JoystickNumButtons(joy); j++)
+						{
+							if(SDL_JoystickGetButton(joy, j))
+							{
+								g.playerJoyBut[0][2] = j;
+								allowMove[i] = 0;
+								done[0] = 1;
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				y = SDL_JoystickGetAxis(joy, 1);
+
+				if(y < -deadzone)
+				{
+					if(allowMove[i])
+					{
+						allJoys[i]--;
+						allowMove[i] = 0;
+					}
+				}
+				else if(y > deadzone)
+				{
+					if(allowMove[i])
+					{
+						allJoys[i]++;
+						allowMove[i] = 0;
+					}
+				}
+				else
+					allowMove[i] = 1;
+
+				if(allJoys[i] < 0)
+					allJoys[i] = -1;
+				else if(allJoys[i] > 0)
+				{
+					if(newg.players == 2)
+						allJoys[i] = 1;
+					else
+						allJoys[i] = 0;
+				}
+
+				if(allJoys[i] < 0)
+				{
+					if(g.playerJoy[0] == -1)
+						g.playerJoy[0] = i; // select P1
+				}
+				else if(allJoys[i] > 0)
+				{
+					if(g.playerJoy[1] == -1)
+						g.playerJoy[1] = i; // select P2
+				}
+				else  // withdraw selection
+				{
+					if(g.playerJoy[0] == i)
+						g.playerJoy[0] = -1;
+					else if(g.playerJoy[1] == i)
+						g.playerJoy[1] = -1;
+				}
+
+				if(allJoys[i] != 0)
+				{
+					for(int j = 0; j < SDL_JoystickNumButtons(joy); j++)
+					{
+						if(SDL_JoystickGetButton(joy, j))
+						{
+							selectInput[i] = 1;
+							allowMove[i] = 0;
+							if(allJoys[i] == -1)
+								p1sel = 1;
+							else if(allJoys[i] == 1)
+								p2sel = 1;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+void menuSelectPlayerDraw(gamedata &g)
+{
+	int numOfJoys = SDL_NumJoysticks();
+
+	char textJoys[numOfJoys][5];
+
+	for(int i = 0; i < numOfJoys; i++)
+	{
+		if(i == 0)
+			sprintf(textJoys[i], "GCW0");
+		else
+			sprintf(textJoys[i], "JOY%d", i);
+	}
+
+	if(numOfJoys > 1)
+	{
+		for(int i = 0; i < numOfJoys; i++)
+		{
+			if(g.playerJoy[0] == i)
+			{
+				if(!p1sel)
+					g.whitefont.write(g.virtualscreen, 120 + 50*i, 30, textJoys[i]);
+				else
+				{
+					if(g.playerJoyBut[0][0] == -1)
+					{
+						g.whitefont.write(g.virtualscreen, 120, 30, textJoys[i]);
+						g.whitefont.write(g.virtualscreen, 120 + 50, 30, "Press Fire key");
+					}
+					else if(g.playerJoyBut[0][1] == -1)
+					{
+						g.whitefont.write(g.virtualscreen, 120, 30, textJoys[i]);
+						g.whitefont.write(g.virtualscreen, 120 + 50, 30, "Press Bomb key");
+					}
+					else if(g.playerJoyBut[0][2] == -1)
+					{
+						g.whitefont.write(g.virtualscreen, 120, 30, textJoys[i]);
+						g.whitefont.write(g.virtualscreen, 120 + 50, 30, "Press Menu key");
+					}
+					else
+					{
+						g.whitefont.write(g.virtualscreen, 120, 30, textJoys[i]);
+						if(newg.players == 2)
+							g.whitefont.write(g.virtualscreen, 120 + 50, 30, "Done! Wait for other player...");
+					}
+				}
+			}
+			else if(g.playerJoy[1] == i)
+			{
+				if(!p2sel)
+					g.whitefont.write(g.virtualscreen, 120 + 50*i, 70, textJoys[i]);
+				else
+				{
+					if(g.playerJoyBut[1][0] == -1)
+					{
+						g.whitefont.write(g.virtualscreen, 120, 70, textJoys[i]);
+						g.whitefont.write(g.virtualscreen, 120 + 50, 70, "Press Fire key");
+					}
+					else if(g.playerJoyBut[1][1] == -1)
+					{
+						g.whitefont.write(g.virtualscreen, 120, 70, textJoys[i]);
+						g.whitefont.write(g.virtualscreen, 120 + 50, 70, "Press Bomb key");
+					}
+					else
+					{
+						g.whitefont.write(g.virtualscreen, 120, 70, textJoys[i]);
+						if(newg.players == 2)
+							g.whitefont.write(g.virtualscreen, 120 + 50, 70, "Done! Wait for other player...");
+					}
+				}
+			}
+			else
+				g.whitefont.write(g.virtualscreen, 120 + 50*i, 50, textJoys[i]);
+		}
+	}
+
+	g.whitefont.write(g.virtualscreen, 40, 30, "Player 1");
+	if(newg.players == 2)
+		g.whitefont.write(g.virtualscreen, 40, 70, "Player 2");	
 }
 

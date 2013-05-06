@@ -59,6 +59,8 @@ void menuDraw(MenuContainer *Container, int x, int y, gamedata &g);
 void menuPlanes(gamedata &g);
 void menuPlanesDraw(int x, int y, gamedata &g);
 void loadPlaneInfo(gamedata &g);
+void menuSelectPlayer(gamedata &g);
+void menuSelectPlayerDraw(gamedata &g);
 
 extern MenuContainer *CurrentMenu;
 extern MenuItem *SelectedItem;

@@ -512,6 +512,14 @@ void init_gamedata(gamedata &g){
     g.drakoption = 0;
   }
 
+  g.playerJoy[0] = -1;
+  g.playerJoy[1] = -1;
+  g.playerJoyBut[0][0] = -1;
+  g.playerJoyBut[0][1] = -1;
+  g.playerJoyBut[0][2] = -1;
+  g.playerJoyBut[1][0] = -1;
+  g.playerJoyBut[1][1] = -1;
+  g.playerJoyBut[1][2] = -1;
 }
 
 // Main Initialization routine

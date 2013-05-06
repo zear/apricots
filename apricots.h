@@ -59,6 +59,7 @@ enum GameStateType{
   STATE_INTRO,
   STATE_MENU,
   STATE_MENU_PLANE_SELECT,
+  STATE_MENU_PLAYER_CONTROL_SELECT,
   STATE_GAME
 };
 
@@ -363,6 +364,8 @@ struct gamedata{
   drakmstype drakms;
   linkedlist <drakguntype> drakgun;
   linkedlist <lasertype> laser;
+  int playerJoy[2];
+  int playerJoyBut[2][3];
 };
 
 // Airbase definitions
