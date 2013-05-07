@@ -417,6 +417,13 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 				jb = (bool)SDL_JoystickGetButton(joy, g.playerJoyBut[0][0]); // fire
 				if(SDL_JoystickGetButton(joy, g.playerJoyBut[0][1])) // drop bomb
 					jy = 1;
+
+				if(SDL_JoystickGetButton(joy, g.playerJoyBut[0][2]) && GameState == STATE_GAME)
+				{
+					GameState = STATE_MENU;
+					CurrentMenu = MenuMain;
+					SelectedItem = menuSwitchItem(CurrentMenu, 0);
+				}
 			}
 		}
 			break;
