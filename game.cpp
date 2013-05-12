@@ -393,7 +393,9 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 		{
 			SDL_Joystick *joy = SDL_JoystickOpen(g.playerJoy[0]);
 			if(demo)
-				computer_ai(g, g.p(), jx, jy, jb);
+			{
+				//computer_ai(g, g.p(), jx, jy, jb);
+			}
 			else
 			{
 				x = SDL_JoystickGetAxis(joy, 0); // left-right
@@ -414,7 +416,8 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 				//else
 				//	jy = 0;
 
-				jb = (bool)SDL_JoystickGetButton(joy, g.playerJoyBut[0][0]); // fire
+				if(!jb)
+					jb = (bool)SDL_JoystickGetButton(joy, g.playerJoyBut[0][0]); // fire
 				if(SDL_JoystickGetButton(joy, g.playerJoyBut[0][1])) // drop bomb
 					jy = 1;
 
@@ -431,7 +434,9 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 		{
 			SDL_Joystick *joy = SDL_JoystickOpen(g.playerJoy[1]);
 			if(demo)
-				computer_ai(g, g.p(), jx, jy, jb);
+			{
+				//computer_ai(g, g.p(), jx, jy, jb);
+			}
 			else
 			{
 				x = SDL_JoystickGetAxis(joy, 0); // left-right
@@ -441,8 +446,8 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 					jx = -1;
 				else if(x > deadzone)
 					jx = 1;
-				else
-					jx = 0;
+				//else
+				//	jx = 0;
 
 
 				if(y < -deadzone)
@@ -452,8 +457,9 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 				//else
 				//	jy = 0;
 
-				jb = (bool)SDL_JoystickGetButton(joy, g.playerJoyBut[1][0]); // fire
-				if(SDL_JoystickGetButton(joy, g.playerJoyBut[0][1])) // drop bomb
+				if(!jb)
+					jb = (bool)SDL_JoystickGetButton(joy, g.playerJoyBut[1][0]); // fire
+				if(SDL_JoystickGetButton(joy, g.playerJoyBut[1][1])) // drop bomb
 					jy = 1;
 			}
 		}
