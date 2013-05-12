@@ -35,7 +35,7 @@ SDLfont :: SDLfont(const SDLfont &f){
       symbol[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i],width,height,
                                            8,width,0,0,0,0);
       symbolmask[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i],width,height,
-                                           8,width,0,0,0,0);    
+                                           8,width,0,0,0,0);
       SDL_SetColorKey(symbolmask[i], SDL_SRCCOLORKEY, 0);
     }    
   }
@@ -68,7 +68,7 @@ SDLfont& SDLfont :: operator= (const SDLfont &f){
         symbol[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i],width,height,
                                              8,width,0,0,0,0);
         symbolmask[i] = SDL_CreateRGBSurfaceFrom(symbolbuffer[i],width,height,
-                                             8,width,0,0,0,0);      
+                                             8,width,0,0,0,0);
         SDL_SetColorKey(symbolmask[i], SDL_SRCCOLORKEY, 0);
       }    
     }
@@ -149,7 +149,8 @@ void SDLfont :: colour(SDL_Surface* surface, int fgc, int bgc){
   palette[1].b=rgb[2];
   for (int i=0;i<256;i++){
     SDL_SetColors(symbol[i], palette, 0, 2);
-    SDL_SetColors(symbolmask[i], palette, 0, 2);    
+    SDL_SetColors(symbolmask[i], palette, 0, 2); 
+    //SDL_SetColorKey(symbol[i], SDL_SRCCOLORKEY, 0); // enable font transparency
   }
 
 }
