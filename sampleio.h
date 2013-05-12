@@ -8,9 +8,14 @@
 
 // Option definitions
 #define AUDIO_NOAUDIO 0
-#define AUDIO_OPENAL 1
+#define AUDIO_SDLMIXER 1
+#define AUDIO_OPENAL 2
 
 // Check compiler flags
+#ifdef AP_AUDIO_SDLMIXER
+#define AP_AUDIO AUDIO_SDLMIXER
+#endif
+
 #ifdef AP_AUDIO_OPENAL
 #define AP_AUDIO AUDIO_OPENAL
 #endif
@@ -22,6 +27,13 @@
 // Noaudio definitions
 #if AP_AUDIO==AUDIO_NOAUDIO
 typedef int ALuint;
+typedef bool ALboolean;
+#endif
+
+// SDL Mixer audio definitions
+#if AP_AUDIO==AUDIO_SDLMIXER
+#include <SDL_mixer.h>
+typedef Mix_Chunk* ALuint;
 typedef bool ALboolean;
 #endif
 
@@ -45,6 +57,7 @@ class sampleio{
     int numsources;
     int numpool;
     ALuint* sources;
+//    Mix_Chunk** sources;
     bool initdone;
     ALuint* samples;
     int poolcount;

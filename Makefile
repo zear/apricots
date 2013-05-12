@@ -24,10 +24,10 @@ endif
 ifeq ($(PLATFORM), gcw)
 	CXX = /opt/gcw0-toolchain/usr/bin/mipsel-gcw0-linux-uclibc-g++
 	STRIP = /opt/gcw0-toolchain/usr/bin/mipsel-gcw0-linux-uclibc-strip
-	CFLAGS = -mips32 -mtune=mips32 -G0 -fomit-frame-pointer -ffunction-sections -ffast-math -fsingle-precision-constant -mbranch-likely
+	CFLAGS = -mips32 -mtune=mips32 -G0 -fomit-frame-pointer -ffunction-sections -ffast-math -fsingle-precision-constant -mbranch-likely -DAP_AUDIO_SDLMIXER
 	LDFLAGS = -L/opt/gcw0-toolchain/usr/mipsel-gcw0-linux-uclibc/sysroot/usr/lib/
 	INCLUDE = -I/opt/gcw0-toolchain/usr/mipsel-gcw0-linux-uclibc/sysroot/usr/include/ -I/opt/opendingux-toolchain/usr/include/SDL
-	LIB = -lSDL -lpthread
+	LIB = -lSDL_mixer -lSDL -lpthread
 endif
 
 ### GP2X/Wiz
@@ -61,9 +61,9 @@ endif
 ifeq ($(PLATFORM), linux_x86)
 	CXX = g++
 	STRIP = strip
-	CFLAGS =
+	CFLAGS = -DAP_AUDIO_SDLMIXER
 	INCLUDE = -I/usr/include/ -I/usr/include/SDL
-	LIB = -lSDL -lpthread
+	LIB = -lSDL_mixer -lSDL -lpthread
 endif
 
 ### win32
