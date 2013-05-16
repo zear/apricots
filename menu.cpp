@@ -329,9 +329,9 @@ void menuLoadAll(gamedata &g)
 	MenuGameOptions = menuCreateNew(MenuGameOptions, 4, "Number of neutral guns:", newg.guns, ACTION_SET_GUNS);
 	MenuGameOptions = menuCreateNew(MenuGameOptions, 5, "Number of buildings:", newg.buildings, ACTION_SET_BUILDINGS);
 	MenuGameOptions = menuCreateNew(MenuGameOptions, 6, "Maximum number of trees:", newg.trees, ACTION_SET_TREES);
-	MenuGameOptions = menuCreateNew(MenuGameOptions, 7, "Does the Drak show up:", newg.drakoption, ACTION_SET_DRAK);
-	MenuGameOptions = menuCreateNew(MenuGameOptions, 8, "", -1, ACTION_NONE);
-	MenuGameOptions = menuCreateNew(MenuGameOptions, 9, "Back", -1, ACTION_GAME_OPTIONS_BACK);
+	//MenuGameOptions = menuCreateNew(MenuGameOptions, 7, "Does the Drak show up:", newg.drakoption, ACTION_SET_DRAK);
+	MenuGameOptions = menuCreateNew(MenuGameOptions, 7, "", -1, ACTION_NONE);
+	MenuGameOptions = menuCreateNew(MenuGameOptions, 8, "Back", -1, ACTION_GAME_OPTIONS_BACK);
 
 	CurrentMenu = MenuMainIntro;
 	SelectedItem = menuSwitchItem(CurrentMenu, 0);
