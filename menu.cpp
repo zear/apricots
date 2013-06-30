@@ -909,7 +909,10 @@ void menuSelectPlayerDraw(gamedata &g)
 					{
 						g.whitefont.write(g.virtualscreen, 120, 30, textJoys[i]);
 						if(newg.players == 2)
-							g.whitefont.write(g.virtualscreen, 120 + 50, 30, "Done! Wait for other player...");
+						{
+							g.whitefont.write(g.virtualscreen, 120 + 50, 20, "Done! Wait for");
+							g.whitefont.write(g.virtualscreen, 120 + 50, 30, "the other player...");
+						}
 					}
 				}
 			}
@@ -933,7 +936,10 @@ void menuSelectPlayerDraw(gamedata &g)
 					{
 						g.whitefont.write(g.virtualscreen, 120, 70, textJoys[i]);
 						if(newg.players == 2)
-							g.whitefont.write(g.virtualscreen, 120 + 50, 70, "Done! Wait for other player...");
+						{
+							g.whitefont.write(g.virtualscreen, 120 + 50, 70, "Done! Wait for");
+							g.whitefont.write(g.virtualscreen, 120 + 50, 80, "the other player...");
+						}
 					}
 				}
 			}
