@@ -306,10 +306,16 @@ void drawall(gamedata &g){
 
   if(GameState == STATE_INTRO || GameState == STATE_MENU)
   {
-	if(CurrentMenu == MenuGameOptions)
-		menuDraw(CurrentMenu, 20, 115, g);
+	if(CurrentMenu == MenuMainIntro)
+		menuDraw(CurrentMenu, 140, 100, g);
+	else if(CurrentMenu == MenuMain)
+		menuDraw(CurrentMenu, 120, 100, g);
+	else if(CurrentMenu == MenuOptions)
+		menuDraw(CurrentMenu, 110, 100,g);
+	else if(CurrentMenu == MenuGameOptions)
+		menuDraw(CurrentMenu, 20, 80, g);
 	else
-		menuDraw(CurrentMenu, 140, 115, g);
+		menuDraw(CurrentMenu, 140, 100, g);
   }
   else if(GameState == STATE_MENU_PLANE_SELECT)
   {
