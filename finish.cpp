@@ -50,7 +50,7 @@ void winnerbox(gamedata &g, int winner, int player, int y, int control){
     //g.whitefont.writemask(g.virtualscreen, 288, 72+y, winstring);
     //char congrats[] = "Congratulations";
     //g.whitefont.writemask(g.virtualscreen, 260, 122+y, congrats);
-    g.whitefont.writemask(g.virtualscreen, 144, 72+y, winstring);
+    g.whitefont.writemask(g.virtualscreen, 130, 72+y, winstring);
     char congrats[] = "Congratulations";
     g.whitefont.writemask(g.virtualscreen, 100, 122+y, congrats);
   }else{
@@ -61,7 +61,7 @@ void winnerbox(gamedata &g, int winner, int player, int y, int control){
       char winstring[] = "Player x wins";
       winstring[7] = '0' + control;
       //g.whitefont.writemask(g.virtualscreen, 268, 112+y, winstring);
-      g.whitefont.writemask(g.virtualscreen, 134, 112+y, winstring);
+      g.whitefont.writemask(g.virtualscreen, 110, 112+y, winstring);
     }else{
       char winstring[] = "Computer (Plane x) wins";
       winstring[16] = '0' + winner;
