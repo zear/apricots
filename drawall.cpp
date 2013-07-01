@@ -230,6 +230,9 @@ void display_playinfo(SDL_Surface *virtualscreen, int player, plane &p, int y,
 
 void drawall(gamedata &g){
 
+  int ypos;
+  int ypos2;
+
   // Set screenheight
   int screenheight = 0;
   if (g.players == 1){
@@ -237,6 +240,18 @@ void drawall(gamedata &g){
   }else{
     screenheight = limit(GAME_HEIGHT,GAME_HEIGHT,120);
   }
+
+  if(!g.scoreBarPos) // top
+  {
+	ypos = 0;
+	ypos2 = 8;
+  }
+  else // bottom
+  {
+	ypos = screenheight - 16;
+	ypos2 = screenheight - 8;
+  }
+
   // Player 1
 //  int x1 = limit(int(g.player1->x)-308, 0, GAME_WIDTH-320);
   int x1 = limit(int(g.player1->x)-160, 0, GAME_WIDTH-320);
@@ -258,7 +273,9 @@ void drawall(gamedata &g){
 
   if (g.players == 1){
   if(GameState == STATE_GAME)
-	  display_playinfo(g.virtualscreen, 1, *g.player1, screenheight - 16, g.images, g.mission,
+//	  display_playinfo(g.virtualscreen, 1, *g.player1, screenheight - 16, g.images, g.mission,
+//                   g.targetscore, g.whitefont, g.greenfont, g);
+	  display_playinfo(g.virtualscreen, 1, *g.player1, ypos, g.images, g.mission,
                    g.targetscore, g.whitefont, g.greenfont, g);
   }else{
   if(GameState == STATE_GAME)
@@ -357,19 +374,19 @@ void drawall(gamedata &g){
 
 	    if (g.players == 1){
 	        rect.x = 304;
-	        rect.y = screenheight-16;
+	        rect.y = ypos;
 	        rect.w = 16;
 	        rect.h = 16;
 	        SDL_FillRect(g.virtualscreen,&rect,16);
-	        g.images[bestp.image+13].blit(g.virtualscreen,304,screenheight-16);
-		g.whitefont.write(g.virtualscreen, 24, screenheight-8, compstring);
+	        g.images[bestp.image+13].blit(g.virtualscreen,304,ypos);
+		g.whitefont.write(g.virtualscreen, 24, ypos2, compstring);
 	    }
 	    else{
 		// TODO: display the best player score
 	    }
 	    // Display score
 	    if (g.players == 1){
-	    display_score(g.virtualscreen, bestp, 112, screenheight-8, g.mission, g.targetscore,
+	    display_score(g.virtualscreen, bestp, 112, ypos2, g.mission, g.targetscore,
 		          g.whitefont, g.greenfont);
 	    }else{
 	    display_score(g.virtualscreen, bestp, 112, screenheight-8, g.mission, g.targetscore,

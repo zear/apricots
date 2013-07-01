@@ -122,6 +122,8 @@ void menuAction(MenuItem *Item, gamedata &g)
 			g.guns = newg.guns;
 			g.buildings = newg.buildings;
 			g.trees = newg.trees;
+			g.drakoption = newg.drakoption;
+			g.scoreBarPos = newg.scoreBarPos;
 
 			for(int i = 1; i < 7; i++)
 			{
@@ -192,6 +194,16 @@ void menuAction(MenuItem *Item, gamedata &g)
 			}
 			break;
 		case ACTION_SET_TREES:
+			{
+				menuActionChangeValue(SelectedItem, 1, g);
+			}
+			break;
+		case ACTION_SET_DRAK:
+			{
+				menuActionChangeValue(SelectedItem, 1, g);
+			}
+			break;
+		case ACTION_SET_SCOREBAR_POS:
 			{
 				menuActionChangeValue(SelectedItem, 1, g);
 			}
@@ -282,6 +294,29 @@ void menuActionChangeValue(MenuItem *Item, int value, gamedata &g)
 				newg.trees = Item->value;
 			}
 			break;
+		case ACTION_SET_DRAK:
+			{
+				Item->value += value;
+				if(Item->value < 0)
+					Item->value = 2;
+				if(Item->value > 2)
+					Item->value = 0;
+
+				newg.drakoption = Item->value;
+			}
+			break;
+		case ACTION_SET_SCOREBAR_POS:
+			{
+				Item->value += value;
+				if(Item->value < 0)
+					Item->value = 1;
+				if(Item->value > 1)
+					Item->value = 0;
+
+				g.scoreBarPos = Item->value;
+				newg.scoreBarPos = Item->value;
+			}
+			break;
 		default:
 			break;
 	}
@@ -334,9 +369,10 @@ void menuLoadAll(gamedata &g)
 	MenuGameOptions = menuCreateNew(MenuGameOptions, 4, "Number of neutral guns:", newg.guns, ACTION_SET_GUNS);
 	MenuGameOptions = menuCreateNew(MenuGameOptions, 5, "Number of buildings:", newg.buildings, ACTION_SET_BUILDINGS);
 	MenuGameOptions = menuCreateNew(MenuGameOptions, 6, "Maximum number of trees:", newg.trees, ACTION_SET_TREES);
-	//MenuGameOptions = menuCreateNew(MenuGameOptions, 7, "Does the Drak show up:", newg.drakoption, ACTION_SET_DRAK);
-	MenuGameOptions = menuCreateNew(MenuGameOptions, 7, "", -1, ACTION_NONE);
-	MenuGameOptions = menuCreateNew(MenuGameOptions, 8, "Back", -1, ACTION_GAME_OPTIONS_BACK);
+	MenuGameOptions = menuCreateNew(MenuGameOptions, 7, "Does the Drak show up:", newg.drakoption, ACTION_SET_DRAK);
+	MenuGameOptions = menuCreateNew(MenuGameOptions, 8, "Score Bar position:", newg.scoreBarPos, ACTION_SET_SCOREBAR_POS);
+	MenuGameOptions = menuCreateNew(MenuGameOptions, 9, "", -1, ACTION_NONE);
+	MenuGameOptions = menuCreateNew(MenuGameOptions, 10, "Back", -1, ACTION_GAME_OPTIONS_BACK);
 
 	CurrentMenu = MenuMainIntro;
 	SelectedItem = menuSwitchItem(CurrentMenu, 0);
@@ -436,8 +472,38 @@ void menuDrawSingle(MenuContainer *Container, int number, int x, int y, gamedata
 			if(CurrentItem->value != -1)
 			{
 				char valueText[10];
-				sprintf(valueText, "%d", CurrentItem->value);
-				g.whitefont.write(g.virtualscreen, x + 250, y, valueText);
+				if(Container == MenuGameOptions && CurrentItem->number == 7) // drak item
+				{
+					if(CurrentItem->value == 2)
+					{
+						sprintf(valueText, "Always");
+						g.whitefont.write(g.virtualscreen, x + 250, y, valueText);
+					}
+					else if(CurrentItem->value == 1)
+					{
+						sprintf(valueText, "Sometimes");
+						g.whitefont.write(g.virtualscreen, x + 225, y, valueText);
+					}
+					else
+					{
+						sprintf(valueText, "Never");
+						g.whitefont.write(g.virtualscreen, x + 250, y, valueText);
+					}
+				}
+				else if(Container == MenuGameOptions && CurrentItem->number == 8) // ScoreBar item
+				{
+					if(CurrentItem->value)
+						sprintf(valueText, "Bottom");
+					else
+						sprintf(valueText, "Top");
+
+					g.whitefont.write(g.virtualscreen, x + 250, y, valueText);
+				}
+				else
+				{
+					sprintf(valueText, "%d", CurrentItem->value);
+					g.whitefont.write(g.virtualscreen, x + 250, y, valueText);
+				}
 			}
 
 			if(CurrentItem == SelectedItem)

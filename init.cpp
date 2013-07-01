@@ -369,16 +369,23 @@ int saveConfig(char *filePath, char *fileName, gamedata &g)
 	fprintf(ofp, "NUM_BUILDINGS: %d\n", g.buildings);
 	fprintf(ofp, "\n");
 	fprintf(ofp, "# Maximum number of trees\n");
-	fprintf(ofp, "NUM_TREES: 50\n");
+	fprintf(ofp, "NUM_TREES: %d\n", g.trees);
 	fprintf(ofp, "\n");
 	fprintf(ofp, "# Whether or not the Drak show up.\n");
 	fprintf(ofp, "# \"always\" will ensure the Drak appear\n");
 	fprintf(ofp, "# \"sometimes\" means Drak appear 5%% of the time\n");
 	fprintf(ofp, "# \"never\" (or anything else) means they never appear.\n");
 	fprintf(ofp, "\n");
-	//fprintf(ofp, "DRAK: always\n");
-	fprintf(ofp, "DRAK: sometimes\n");
-	//fprintf(ofp, "DRAK: never\n");
+	if(g.drakoption == 2)
+		fprintf(ofp, "DRAK: always\n");
+	else if(g.drakoption == 1)
+		fprintf(ofp, "DRAK: sometimes\n");
+	else
+		fprintf(ofp, "DRAK: never\n");
+	fprintf(ofp, "\n");
+	fprintf(ofp, "# Score Bar placement (0=Top, 1=Bottom)\n");
+	fprintf(ofp, "SCOREBAR_POS: %d\n", g.scoreBarPos);
+	
 
 	fclose(ofp);
 	free(newFileName);
@@ -520,6 +527,9 @@ void init_gamedata(gamedata &g){
   g.playerJoyBut[1][0] = -1;
   g.playerJoyBut[1][1] = -1;
   g.playerJoyBut[1][2] = -1;
+
+  // Score bar position
+  g.scoreBarPos = getConfig(config, "SCOREBAR_POS", 0, 0, 1); 
 }
 
 // Main Initialization routine

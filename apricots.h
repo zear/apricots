@@ -366,6 +366,7 @@ struct gamedata{
   linkedlist <lasertype> laser;
   int playerJoy[2];
   int playerJoyBut[2][3];
+  int scoreBarPos;
 };
 
 // Airbase definitions
