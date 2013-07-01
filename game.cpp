@@ -391,6 +391,9 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 	switch(g.p().control){
 		case 1:
 		{
+			if(g.playerJoy[0] == -1)
+				break;
+
 			SDL_Joystick *joy = SDL_JoystickOpen(g.playerJoy[0]);
 			if(demo)
 			{
@@ -432,6 +435,9 @@ void controlJoy(gamedata &g, int &jx, int &jy, bool &jb){
 			break;
 		case 2:
 		{
+			if(g.playerJoy[1] == -1)
+				break;
+
 			SDL_Joystick *joy = SDL_JoystickOpen(g.playerJoy[1]);
 			if(demo)
 			{

@@ -31,7 +31,8 @@
 
 void setup_display(gamedata &g){
   g.physicalscreen = SDL_SetVideoMode(320, 240, 8, 
-                                      SDL_SWSURFACE);
+                                      //SDL_SWSURFACE);
+					SDL_HWSURFACE|SDL_DOUBLEBUF);
 /*
   g.physicalscreen = SDL_SetVideoMode(640, 480, 8, 
                               SDL_HWSURFACE|SDL_HWPALETTE|SDL_HWACCEL);
@@ -41,14 +42,16 @@ void setup_display(gamedata &g){
     exit(1);
   }
 
-  g.virtualscreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 8,
+  //g.virtualscreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 8,
+  g.virtualscreen = SDL_CreateRGBSurface(SDL_HWSURFACE, 320, 240, 8,
                                          0, 0, 0, 0);
   if (g.virtualscreen == NULL){
     fprintf(stderr, "Couldn't set 640x480x8 virtual video mode: %s\n",SDL_GetError());
     exit(1);
   }
 
-  g.gamescreen = SDL_CreateRGBSurface(SDL_SWSURFACE, GAME_WIDTH, GAME_HEIGHT, 8,
+  //g.gamescreen = SDL_CreateRGBSurface(SDL_SWSURFACE, GAME_WIDTH, GAME_HEIGHT, 8,
+  g.gamescreen = SDL_CreateRGBSurface(SDL_HWSURFACE, GAME_WIDTH, GAME_HEIGHT, 8,
                                       0, 0, 0, 0);
   if (g.gamescreen == NULL){
     fprintf(stderr, "Couldn't set game video mode: %s\n",SDL_GetError());

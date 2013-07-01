@@ -404,7 +404,8 @@ void drawall(gamedata &g){
     rect.h = 240;
   SDL_BlitSurface(g.virtualscreen, &rect, g.physicalscreen, NULL);
 
-  SDL_UpdateRect(g.physicalscreen, 0, 0, 0, 0);
+  SDL_Flip(g.physicalscreen);
+  //SDL_UpdateRect(g.physicalscreen, 0, 0, 0, 0);
 
   g.sound.update();
 

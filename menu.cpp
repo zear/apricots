@@ -107,8 +107,13 @@ void menuAction(MenuItem *Item, gamedata &g)
 			}
 			else if(SDL_NumJoysticks() == 1)
 			{
-				if(g.playerJoy[0] == -1)
-					g.playerJoy[0] = 0; // select GCW's built-in joystick for P1
+				if(g.playerJoy[0] == -1) // select GCW's built-in joystick for P1
+				{
+					g.playerJoy[0] = 0;
+					g.playerJoyBut[0][0] = 0;
+					g.playerJoyBut[0][1] = 1;
+					g.playerJoyBut[0][2] = 2;
+				}
 			}
 
 			finish_game(g);
