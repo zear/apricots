@@ -457,6 +457,11 @@ void menuInput(gamedata &g)
 		keys[SDLK_RETURN] = SDL_RELEASED;
 		menuAction(SelectedItem, g);
 	}
+	else if(keys[SDLK_LCTRL] == SDL_PRESSED)
+	{
+		keys[SDLK_LCTRL] = SDL_RELEASED;
+		menuAction(SelectedItem, g);
+	}
 }
 
 void menuDrawSingle(MenuContainer *Container, int number, int x, int y, gamedata &g)
@@ -556,9 +561,12 @@ void menuPlanes(gamedata &g)
 		keys[SDLK_RIGHT] = SDL_RELEASED;
 		cursorX++;
 	}
-	else if(keys[SDLK_ESCAPE] == SDL_PRESSED)
+	else if(keys[SDLK_ESCAPE] == SDL_PRESSED || keys[SDLK_LALT] == SDL_PRESSED)
 	{
-		keys[SDLK_ESCAPE] = SDL_RELEASED;
+		if(keys[SDLK_ESCAPE] == SDL_PRESSED)
+			keys[SDLK_ESCAPE] = SDL_RELEASED;
+		if(keys[SDLK_LALT] == SDL_PRESSED)
+			keys[SDLK_LALT] = SDL_RELEASED;
 
 		if(p1plane != NULL)
 		{
@@ -599,9 +607,12 @@ void menuPlanes(gamedata &g)
 			}
 		}
 	}
-	else if(keys[SDLK_RETURN] == SDL_PRESSED)
+	else if(keys[SDLK_RETURN] == SDL_PRESSED || keys[SDLK_LCTRL] == SDL_PRESSED)
 	{
-		keys[SDLK_RETURN] = SDL_RELEASED;
+		if(keys[SDLK_RETURN] == SDL_PRESSED)
+			keys[SDLK_RETURN] = SDL_RELEASED;
+		if(keys[SDLK_LCTRL] == SDL_PRESSED)
+			keys[SDLK_LCTRL] = SDL_RELEASED;
 
 		planeArray[cursorY][cursorX]++;
 
