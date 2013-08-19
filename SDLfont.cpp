@@ -183,7 +183,7 @@ void SDLfont :: writemask(SDL_Surface* surface, int x, int y, char* text){
 
 // Write text at x,y without mask
 
-void SDLfont :: write(SDL_Surface* surface, int x, int y, char* text){
+void SDLfont :: write(SDL_Surface* surface, int x, int y, const char* text){
 
   // Blit each letter in turn
   int letter = 0;

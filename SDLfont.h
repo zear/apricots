@@ -24,5 +24,5 @@ class SDLfont{
     void loadpsf(char*, int, int);
     void colour(SDL_Surface*, int, int);
     void writemask(SDL_Surface*, int, int, char*);
-    void write(SDL_Surface*, int, int, char*);
+    void write(SDL_Surface*, int, int, const char*);
 };

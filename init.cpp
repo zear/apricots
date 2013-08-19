@@ -295,7 +295,7 @@ int getConfig(string config, string name, int defval, int min, int max)
 
 }
 
-int saveConfig(char *filePath, char *fileName, gamedata &g)
+int saveConfig(const char *filePath, const char *fileName, gamedata &g)
 {
 	FILE *ofp;
 	char *newFileName = NULL;

@@ -40,7 +40,7 @@ typedef struct MenuContainerStruct
 	int size;
 } MenuContainer;
 
-MenuContainer *menuCreateNew(MenuContainer *Container, int number, char *caption, MenuAction Action);
+MenuContainer *menuCreateNew(MenuContainer *Container, int number, const char *caption, MenuAction Action);
 MenuItem *menuSwitchItem(MenuContainer *Container, int number);
 
 extern int planeArray[6][3];

@@ -19,13 +19,13 @@ int *p2plane = NULL;
 int p1sel = 0;
 int p2sel = 0;
 
-MenuContainer *menuCreateNew(MenuContainer *Container, int number, char *caption, int value, MenuAction Action)
+MenuContainer *menuCreateNew(MenuContainer *Container, int number, const char *caption, int value, MenuAction Action)
 {
 	MenuItem *NewItem = NULL;
 
 	if(Container == NULL)
 	{
-		Container = malloc(sizeof(MenuContainer));
+		Container = (MenuContainer *)malloc(sizeof(MenuContainer));
 		if(Container == NULL)
 		{
 			fprintf(stderr, "ERROR: menuCreateNew: Out of memory!\n");
@@ -35,7 +35,7 @@ MenuContainer *menuCreateNew(MenuContainer *Container, int number, char *caption
 		Container->size = 0;
 	}
 
-	NewItem = malloc(sizeof(MenuItem));
+	NewItem = (MenuItem *)malloc(sizeof(MenuItem));
 	if(NewItem == NULL)
 	{
 		fprintf(stderr, "ERROR: menuCreateNew: Out of memory!\n");
