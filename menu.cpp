@@ -837,41 +837,51 @@ void menuSelectPlayer(gamedata &g)
 						allowMove[i] = 1;
 				}
 
-				if(g.playerJoyBut[pnum][0] == -1 && allowMove[i])
+				if(i == 0) // joystick is GCW0, skip button mapping
 				{
-					for(int j = 0; j < SDL_JoystickNumButtons(joy); j++)
-					{
-						if(SDL_JoystickGetButton(joy, j))
-						{
-							g.playerJoyBut[pnum][0] = j;
-							allowMove[i] = 0;
-						}
-					}
+					if(pnum == 0)
+						done[0] = 1;
+					else if(pnum == 1)
+						done[1] = 1;
 				}
-				else if(g.playerJoyBut[pnum][1] == -1 && allowMove[i])
+				else
 				{
-					for(int j = 0; j < SDL_JoystickNumButtons(joy); j++)
-					{
-						if(SDL_JoystickGetButton(joy, j))
-						{
-							g.playerJoyBut[pnum][1] = j;
-							allowMove[i] = 0;
-							if(pnum == 1)
-								done[1] = 1;
-						}
-					}
-				}
-				else if(allJoys[i] == -1 && allowMove[i])
-				{
-					if(g.playerJoyBut[0][2] == -1)
+					if(g.playerJoyBut[pnum][0] == -1 && allowMove[i])
 					{
 						for(int j = 0; j < SDL_JoystickNumButtons(joy); j++)
 						{
 							if(SDL_JoystickGetButton(joy, j))
 							{
-								g.playerJoyBut[0][2] = j;
+								g.playerJoyBut[pnum][0] = j;
 								allowMove[i] = 0;
-								done[0] = 1;
+							}
+						}
+					}
+					else if(g.playerJoyBut[pnum][1] == -1 && allowMove[i])
+					{
+						for(int j = 0; j < SDL_JoystickNumButtons(joy); j++)
+						{
+							if(SDL_JoystickGetButton(joy, j))
+							{
+								g.playerJoyBut[pnum][1] = j;
+								allowMove[i] = 0;
+								if(pnum == 1)
+									done[1] = 1;
+							}
+						}
+					}
+					else if(allJoys[i] == -1 && allowMove[i])
+					{
+						if(g.playerJoyBut[0][2] == -1)
+						{
+							for(int j = 0; j < SDL_JoystickNumButtons(joy); j++)
+							{
+								if(SDL_JoystickGetButton(joy, j))
+								{
+									g.playerJoyBut[0][2] = j;
+									allowMove[i] = 0;
+									done[0] = 1;
+								}
 							}
 						}
 					}
@@ -898,7 +908,31 @@ void menuSelectPlayer(gamedata &g)
 					}
 				}
 				else
-					allowMove[i] = 1;
+					if(i == 0) // joystick is GCW0, allow selection with keyboard 
+					{
+						Uint8 *key = SDL_GetKeyState(NULL);
+
+						if(key[SDLK_UP])
+						{
+							if(allowMove[i])
+							{
+								allJoys[i]--;
+								allowMove[i] = 0;
+							}
+						}
+						else if(key[SDLK_DOWN])
+						{
+							if(allowMove[i])
+							{
+								allJoys[i]++;
+								allowMove[i] = 0;
+							}
+						}
+						else
+							allowMove[i] = 1;
+					}
+					else
+						allowMove[i] = 1;
 
 				if(allJoys[i] < 0)
 					allJoys[i] = -1;
@@ -942,6 +976,21 @@ void menuSelectPlayer(gamedata &g)
 								p2sel = 1;
 						}
 					}
+
+					if(i == 0) // joystick is GCW0, allow selection with keyboard
+					{
+						Uint8 *key = SDL_GetKeyState(NULL);
+
+						if(key[SDLK_LCTRL])
+						{
+							selectInput[i] = 1;
+							allowMove[i] = 0;
+							if(allJoys[i] == -1)
+								p1sel = 1;
+							else if(allJoys[i] == 1)
+								p2sel = 1;
+						}
+					}
 				}
 			}
 		}
@@ -972,17 +1021,17 @@ void menuSelectPlayerDraw(gamedata &g)
 					g.whitefont.write(g.virtualscreen, 120 + 50*i, 30, textJoys[i]);
 				else
 				{
-					if(g.playerJoyBut[0][0] == -1)
+					if(g.playerJoyBut[0][0] == -1 && i != 0)
 					{
 						g.whitefont.write(g.virtualscreen, 120, 30, textJoys[i]);
 						g.whitefont.write(g.virtualscreen, 120 + 50, 30, "Press Fire key");
 					}
-					else if(g.playerJoyBut[0][1] == -1)
+					else if(g.playerJoyBut[0][1] == -1 && i != 0)
 					{
 						g.whitefont.write(g.virtualscreen, 120, 30, textJoys[i]);
 						g.whitefont.write(g.virtualscreen, 120 + 50, 30, "Press Bomb key");
 					}
-					else if(g.playerJoyBut[0][2] == -1)
+					else if(g.playerJoyBut[0][2] == -1 && i != 0)
 					{
 						g.whitefont.write(g.virtualscreen, 120, 30, textJoys[i]);
 						g.whitefont.write(g.virtualscreen, 120 + 50, 30, "Press Menu key");
@@ -1004,12 +1053,12 @@ void menuSelectPlayerDraw(gamedata &g)
 					g.whitefont.write(g.virtualscreen, 120 + 50*i, 70, textJoys[i]);
 				else
 				{
-					if(g.playerJoyBut[1][0] == -1)
+					if(g.playerJoyBut[1][0] == -1 && i != 0)
 					{
 						g.whitefont.write(g.virtualscreen, 120, 70, textJoys[i]);
 						g.whitefont.write(g.virtualscreen, 120 + 50, 70, "Press Fire key");
 					}
-					else if(g.playerJoyBut[1][1] == -1)
+					else if(g.playerJoyBut[1][1] == -1 && i != 0)
 					{
 						g.whitefont.write(g.virtualscreen, 120, 70, textJoys[i]);
 						g.whitefont.write(g.virtualscreen, 120 + 50, 70, "Press Bomb key");
